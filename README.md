@@ -13,25 +13,27 @@ Send email marketing campaigns with [Amazon SES](https://aws.amazon.com/ses/). L
   - You are using a SES endpoint that has production access (not sandbox mode)
   - You have created a recipients list and added some recipients to it through the API
 
-## Contributing Guidelines
-Contributions are always welcome! If you'd like to collaborate with us, take into account that:
-
-* We use [ES2015](https://babeljs.io/docs/learn-es2015/) and love OOP.
-* We test with [mocha](https://github.com/mochajs/mocha) + [chai](https://github.com/chaijs/chai) + [sinon](https://github.com/sinonjs/sinon).
-
-Feel free to <a href="mailto:hi@microapps.com">contact us</a> if you have any question!
-
-
-## License
-
-MoonMail is available under the MIT license. See the LICENSE file for more info.
-
-## Professional Help
-
-If you need support getting MoonMail into production in your AWS account, contact the experts:
-
-- <a href="mailto:ryan@serverlesscode.com">ServerlessCode</a>
-- <a href="http://www.apiwise.nl">Apiwise</a>
-- <a href="https://sc5.io">SC5</a>
-- <a href="mailto:sam@acloud.guru">A Cloud Guru - AWS training & serverless experts</a> (<a href="https://acloud.guru">Visit Web Site</a>)
-- <a href="mailto:hello@goltfisch.de">Just Serverless</a>
+## EC2 - Port 80
+ 
+ 
+ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000
+ 
+ Launch Node.js on port 3000. Requests to port 80 will get mapped to port 3000.
+ 
+ You should also edit your /etc/rc.local file and add that line minus the sudo. That will add the redirect when the machine boots up. You don't need sudo in /etc/rc.local because the commands there are run as root when the system boots.
+ 
+ # Nodejs in AWS EC2
+ 
+ http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
+ 
+ # AWS Code Deploy Agent
+ 
+ http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-run-agent-install.html
+ 
+ # AWS Code Deploy Tutorial
+ 
+ http://www.knowarth.com/aws-code-deploy-with-git/
+ 
+ # WebPack Global
+ 
+ npm install webpack -g
