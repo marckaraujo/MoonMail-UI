@@ -3,13 +3,6 @@ import cssnano from 'cssnano';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-const cssModulesLoader = [
-  'css?sourceMap&-minimize',
-  'modules',
-  'importLoaders=1',
-  'localIdentName=[name]__[local]__[hash:base64:5]'
-].join('&');
-
 export default function(options) {
   const webpackConfig = {
     entry: [
@@ -27,16 +20,13 @@ export default function(options) {
         filename: 'index.html',
         inject: 'body'
       }),
-      new ExtractTextPlugin({
-        filename: 'styles.[hash].css',
-        allChunks: true
-      })
+        new ExtractTextPlugin({ filename: 'styles.[hash].css', disable: false, allChunks: true })
     ],
     module: {
-      loaders: [{
-        test: /\.js$/,
+      rules: [{
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           cacheDirectory: true,
           plugins: ['transform-runtime'],
@@ -63,45 +53,23 @@ export default function(options) {
         loader: 'json'
       }, {
         test: /\.html$/,
-        loader: 'html'
+        loader: 'html-loader'
       }, {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-          disable: options.dev,
-          fallbackLoader: 'style-loader',
-          loader: [cssModulesLoader, 'postcss', 'sass?sourceMap']
-        })
-      }, {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: ['css-loader', 'postcss']
-        })
+          test: /\.(css|scss)$/,
+          loader: ExtractTextPlugin.extract({
+              loader: [
+                  { loader: 'css-loader?sourceMap&modules&importLoaders=1&localIdentName=[path]___[local]___[hash:base64:5]'},
+                  { loader: 'sass-loader?sourceMap'},
+                  { loader: 'postcss-loader?sourceMap' },
+              ]
+          })
       }]
     },
     resolve: {
       modules: ['node_modules'],
-      extensions: ['', '.js', '.jsx', '.json'],
+      extensions: ['.js', '.jsx', '.json'],
       alias: {}
-    },
-    globals: {},
-    postcss: [
-      cssnano({
-        autoprefixer: {
-          add: true,
-          remove: true,
-          browsers: ['last 2 versions']
-        },
-        discardComments: {
-          removeAll: true
-        },
-        discardUnused: false,
-        mergeIdents: false,
-        reduceIdents: false,
-        safe: true,
-        sourcemap: true
-      })
-    ]
+    }
   };
 
   if (options.dev) {
