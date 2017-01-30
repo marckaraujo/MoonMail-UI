@@ -5,13 +5,14 @@ import thunk from 'redux-thunk';
 import withScroll from 'scroll-behavior';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
-import {Router, useRouterHistory} from 'react-router';
+import {IndexRoute, Route, useRouterHistory} from 'react-router';
 import createHashHistory from 'history/lib/createHashHistory';
 import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux';
 import {loadSettings} from './actions';
 import reducers from './reducers';
 import routes from './routes';
-
+import ReactStormpath, { Router } from 'react-stormpath';
+import LoginView from './routes/Login'
 const initialState = {};
 const appHistory = withScroll(
   useRouterHistory(createHashHistory)({queryKey: false})
@@ -25,8 +26,14 @@ const store = createStore(reducers, initialState, compose(
 const history = syncHistoryWithStore(appHistory, store);
 store.dispatch(loadSettings());
 
+ReactStormpath.init();
+
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} routes={routes} />
+      <Router history={history} >
+          <HomeRoute path='/' component={LoginView}>
+
+          </HomeRoute>
+      </Router>
   </Provider>
   , document.getElementById('root'));

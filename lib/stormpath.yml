@@ -1,0 +1,6 @@
+client:
+  apiKey:
+    id: STORMPATH_CLIENT_APIKEY_ID
+    secret: STORMPATH_CLIENT_APIKEY_SECRET
+application:
+  href: STORMPATH_APPLICATION_HREF
